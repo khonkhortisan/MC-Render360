@@ -50,7 +50,7 @@ public abstract class RenderMethod {
 	
 	static {
 		//Put all of the render methods here
-		renderMethods = new RenderMethod[] {new Standard(), new Cubic(), new Hammer(), new Equirectangular()};
+		renderMethods = new RenderMethod[] {new Standard(), new Cubic(), new Hammer(), new Equirectangular(), new Fisheye()};
 	}
 	
 	/**
@@ -185,6 +185,12 @@ public abstract class RenderMethod {
 		GL20.glUniform1i(texBottomUniform, 5);
 		int fovUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fovx");
 		GL20.glUniform1f(fovUniform, getFOV());
+		int fisheyeTypeUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fisheyeType");
+		GL20.glUniform1i(fisheyeTypeUniform, getFisheyeType());
+		int aspectRatioUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "aspectRatio");
+		GL20.glUniform1f(aspectRatioUniform, mc.displayWidth/(float)mc.displayHeight);
+		int fullFrameUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fullFrame");
+		GL20.glUniform1i(fullFrameUniform, getFullFrame()?1:0);
 		int backgroundUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "backgroundColor");
 		GL20.glUniform4f(backgroundUniform, 0, 0, 0, 1);
 		
@@ -256,7 +262,7 @@ public abstract class RenderMethod {
 			renderRight(er, mc, partialTicks, finishTimeNano, player, framebufferTextures[3], yaw, pitch, prevYaw, prevPitch);
 			renderTop(er, mc, partialTicks, finishTimeNano, player, framebufferTextures[4], yaw, pitch, prevYaw, prevPitch);
 			renderBottom(er, mc, partialTicks, finishTimeNano, player, framebufferTextures[5], yaw, pitch, prevYaw, prevPitch);
-			if (getFOV() >= 270 || renderAllSides()) {
+			if (getFOV() >= 250.53 || renderAllSides()) {
 				renderBack(er, mc, partialTicks, finishTimeNano, player, framebufferTextures[1], yaw, pitch, prevYaw, prevPitch);
 			}
 		}
@@ -405,6 +411,12 @@ public abstract class RenderMethod {
 		GL20.glUniform1i(texBottomUniform, 5);
 		int fovUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fovx");
 		GL20.glUniform1f(fovUniform, getFOV());
+		int fisheyeTypeUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fisheyeType");
+		GL20.glUniform1i(fisheyeTypeUniform, getFisheyeType());
+		int aspectRatioUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "aspectRatio");
+		GL20.glUniform1f(aspectRatioUniform, mc.displayWidth/(float)mc.displayHeight);
+		int fullFrameUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fullFrame");
+		GL20.glUniform1i(fullFrameUniform, getFullFrame()?1:0);
 		
 		int backgroundUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "backgroundColor");
 		float backgroundColor[] = getBackgroundColor();
@@ -517,6 +529,14 @@ public abstract class RenderMethod {
 	
 	public float getFOV() {
 		return 360;
+	}
+	
+	public int getFisheyeType() {
+		return 1;
+	}
+	
+	public boolean getFullFrame() {
+		return false;
 	}
 	
 	public float getQuality() {
