@@ -50,7 +50,7 @@ public abstract class RenderMethod {
 	
 	static {
 		//Put all of the render methods here
-		renderMethods = new RenderMethod[] {new Standard(), new Cubic(), new Hammer(), new Equirectangular()};
+		renderMethods = new RenderMethod[] {new Standard(), new Cubic(), new Hammer(), new Equirectangular(), new Fisheye()};
 	}
 	
 	/**
@@ -185,6 +185,8 @@ public abstract class RenderMethod {
 		GL20.glUniform1i(texBottomUniform, 5);
 		int fovUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fovx");
 		GL20.glUniform1f(fovUniform, getFOV());
+		int fisheyetype = GL20.glGetUniformLocation(shader.getShaderProgram(), "fisheyetype");
+		GL20.glUniform1f(fovUniform, getfisheyetype());
 		int backgroundUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "backgroundColor");
 		GL20.glUniform4f(backgroundUniform, 0, 0, 0, 1);
 		
@@ -411,6 +413,8 @@ public abstract class RenderMethod {
 		GL20.glUniform1i(texBottomUniform, 5);
 		int fovUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fovx");
 		GL20.glUniform1f(fovUniform, getFOV());
+		int fisheyetype = GL20.glGetUniformLocation(shader.getShaderProgram(), "fisheyetype");
+		GL20.glUniform1f(fovUniform, getfisheyetype());
 		
 		int backgroundUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "backgroundColor");
 		float backgroundColor[] = getBackgroundColor();
@@ -523,6 +527,10 @@ public abstract class RenderMethod {
 	
 	public float getFOV() {
 		return 360;
+	}
+	
+	public float getfisheyetype() {
+		return 0;
 	}
 	
 	public float getQuality() {
