@@ -20,7 +20,7 @@ import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.Entity;
@@ -113,7 +113,7 @@ public abstract class RenderMethod {
 		GlStateManager.disableLighting();
         GlStateManager.disableFog();
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexbuffer = tessellator.getBuffer();
+        BufferBuilder vertexbuffer = tessellator.getBuffer();
         mc.getTextureManager().bindTexture(guiScreen.OPTIONS_BACKGROUND);
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
         vertexbuffer.pos(0.0D, (double)guiScreen.height, 0.0D).tex(0.0D, (double)((float)guiScreen.height / 32.0F)).color(64, 64, 64, 255).endVertex();
@@ -286,7 +286,8 @@ public abstract class RenderMethod {
 		changeYaw = 0;
 		changePitch = 0;
 		RenderUtil.renderPass = 0;
-		er.renderWorldPass(2, partialTicks, finishTimeNano);
+		//er.renderWorldPass(2, partialTicks, finishTimeNano);
+		er.renderWorld(partialTicks, finishTimeNano);
 		resetPlayerRotation();
 	}
 	
@@ -297,7 +298,8 @@ public abstract class RenderMethod {
 		changeYaw = -90;
 		changePitch = 0;
 		RenderUtil.renderPass = 1;
-		er.renderWorldPass(2, partialTicks, finishTimeNano);
+		//er.renderWorldPass(2, partialTicks, finishTimeNano);
+		er.renderWorld(partialTicks, finishTimeNano);
 		resetPlayerRotation();
 	}
 	
@@ -308,7 +310,8 @@ public abstract class RenderMethod {
 		changeYaw = 90;
 		changePitch = 0;
 		RenderUtil.renderPass = 2;
-		er.renderWorldPass(2, partialTicks, finishTimeNano);
+		//er.renderWorldPass(2, partialTicks, finishTimeNano);
+		er.renderWorld(partialTicks, finishTimeNano);
 		resetPlayerRotation();
 	}
 	
@@ -319,7 +322,8 @@ public abstract class RenderMethod {
 		changeYaw = 0;
 		changePitch = - 90;
 		RenderUtil.renderPass = 3;
-		er.renderWorldPass(2, partialTicks, finishTimeNano);
+		//er.renderWorldPass(2, partialTicks, finishTimeNano);
+		er.renderWorld(partialTicks, finishTimeNano);
 		resetPlayerRotation();
 	}
 	
@@ -330,7 +334,8 @@ public abstract class RenderMethod {
 		changeYaw = 0;
 		changePitch = 90;
 		RenderUtil.renderPass = 4;
-		er.renderWorldPass(2, partialTicks, finishTimeNano);
+		//er.renderWorldPass(2, partialTicks, finishTimeNano);
+		er.renderWorld(partialTicks, finishTimeNano);
 		resetPlayerRotation();
 	}
 	
@@ -341,7 +346,8 @@ public abstract class RenderMethod {
 		changeYaw = 180;
 		changePitch = 0;
 		RenderUtil.renderPass = 5;
-		er.renderWorldPass(2, partialTicks, finishTimeNano);
+		//er.renderWorldPass(2, partialTicks, finishTimeNano);
+		er.renderWorld(partialTicks, finishTimeNano);
 		resetPlayerRotation();
 		RenderUtil.renderPass = 0;
 	}

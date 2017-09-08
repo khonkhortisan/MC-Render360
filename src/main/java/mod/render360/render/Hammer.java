@@ -47,7 +47,8 @@ public class Hammer extends RenderMethod {
 	public float[] getBackgroundColor() {
 		if (skyBackground) {
 			EntityRenderer er = Minecraft.getMinecraft().entityRenderer;
-			return new float[] {er.fogColorRed, er.fogColorGreen, er.fogColorBlue};
+			//return new float[] {er.fogColorRed, er.fogColorGreen, er.fogColorBlue};
+			return null;
 		} else {
 			return null;
 		}

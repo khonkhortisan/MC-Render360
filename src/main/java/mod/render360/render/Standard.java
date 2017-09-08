@@ -27,7 +27,8 @@ public class Standard extends RenderMethod {
 		RenderUtil.render360 = false;
 		RenderUtil.partialWidth = mc.displayWidth;
 		RenderUtil.partialHeight = mc.displayHeight;
-		er.renderWorldPass(2, partialTicks, finishTimeNano);
+		//er.renderWorldPass(2, partialTicks, finishTimeNano);
+		er.renderWorld(partialTicks, finishTimeNano);
 	}
 	
 	@Override

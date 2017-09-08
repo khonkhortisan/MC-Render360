@@ -145,7 +145,7 @@ public class Render360EventHandler {
 	public void rotateParticle(Render360Event.RotateParticleEvent e) {
 		if (RenderUtil.render360) {
 			float posX = e.posX;
-			float posY = e.posY - Minecraft.getMinecraft().thePlayer.eyeHeight;
+			float posY = e.posY - Minecraft.getMinecraft().player.eyeHeight;
 			float posZ = e.posZ;
 			
 			float hDist = (float) (Math.sqrt(posZ*posZ + posX*posX));
