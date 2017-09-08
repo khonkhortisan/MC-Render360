@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL20;
 
+import mod.render360.RenderUtil;
 import mod.render360.Shader;
 import mod.render360.gui.Slider;
 import net.minecraft.client.Minecraft;
@@ -42,7 +43,7 @@ public class Fisheye extends RenderMethod {
 		super.addButtonsToGui(buttonList, width, height);
 		buttonList.add(new Slider(new Responder(), 18104, width / 2 - 180, height / 6 + 24, 360, 20, "FOV", 0f, 360f, fov, 1f, null));
 		buttonList.add(new GuiButton(18103, width / 2 - 155, height / 6 + 72, 150, 20, "Background Color: " + (skyBackground ? "Sky" : "Black")));
-		buttonList.add(new GuiButton(18110, width / 2 + 5, height / 6 + 120, 150, 20, "Projection: "+(fisheyetype==0?"Equidistant":"")+(fisheyetype==1?"Stereographic":"")+(fisheyetype==2?"Orthographic":"")+(fisheyetype==3?"Equisolid":"")+(fisheyetype==4?"Thoby":"")));
+		buttonList.add(new GuiButton(18110, width / 2 + 100, height / 6 - 12, (width - 10) - (width / 2 + 100), 20, (fisheyetype==0?"Equidistant":"")+(fisheyetype==1?"Stereographic":"")+(fisheyetype==2?"Orthographic":"")+(fisheyetype==3?"Equisolid":"")+(fisheyetype==4?"Thoby":"")));
 	}
 
 	@Override
@@ -57,7 +58,7 @@ public class Fisheye extends RenderMethod {
 			fisheyetype+=1;
 			if (fisheyetype>4)
 				fisheyetype=0;
-			button.displayString = "Projection: "+(fisheyetype==0?"Equidistant":"")+(fisheyetype==1?"Stereographic":"")+(fisheyetype==2?"Orthographic":"")+(fisheyetype==3?"Equisolid":"")+(fisheyetype==4?"Thoby":"");
+			button.displayString = (fisheyetype==0?"Equidistant":"")+(fisheyetype==1?"Stereographic":"")+(fisheyetype==2?"Orthographic":"")+(fisheyetype==3?"Equisolid":"")+(fisheyetype==4?"Thoby":"");
 		}
 	}
 
