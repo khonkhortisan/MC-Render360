@@ -58,9 +58,15 @@ void main(void) {
 		vec3 ray = vec3(0, 0, -1);
 
 		//fisheye stuff
-		float r = sqrt((texcoord.x+pixelOffset[loop].x) * (texcoord.x+pixelOffset[loop].x) + (texcoord.y+pixelOffset[loop].y) * (texcoord.y+pixelOffset[loop].y));
+		float cx = (texcoord.x+pixelOffset[loop].x-0.5)*2*M_PI*fovx/360;
+		float cy = (texcoord.y+pixelOffset[loop].y-0.5)*2*M_PI*fovx/360;
+		
+		//float cx = (texcoord.x+pixelOffset[loop].x)*2 - 1;
+		//float cy = (texcoord.y+pixelOffset[loop].y)*2 - 1;
+		float r = sqrt(cx*cx+cy*cy);
+		//float r = sqrt((texcoord.x+pixelOffset[loop].x) * (texcoord.x+pixelOffset[loop].x) + (texcoord.y+pixelOffset[loop].y) * (texcoord.y+pixelOffset[loop].y));
 
-		if (r > M_PI) {
+		if (r > M_PI*fovx/360) {
 			color = backgroundColor;
 			return;
 		}
@@ -78,13 +84,14 @@ void main(void) {
 		}
 
 		float s = sin(theta);
-		float x = (texcoord.x+pixelOffset[loop].x)/r*s, y = (texcoord.y+pixelOffset[loop].y)/r*s, z = cos(theta);
+		float x = (cx)/r*s, y = (cy)/r*s, z = cos(theta);
 
-		float longitude = 2*atan((sqrt(2.0)*z*x)/(2*z*z - 1));
-		float latitude = asin(sqrt(2.0)*z*y);
+		//float longitude = 2*atan((sqrt(2.0)*z*x)/(2*z*z - 1));
+		//float latitude = asin(sqrt(2.0)*z*y);
 
 		//rotate ray\n
-		ray = rotate(ray, vec2(longitude, latitude));
+		//ray = rotate(ray, vec2(longitude, latitude));
+		ray.x = x; ray.y = y; ray.z = -z;
 
 		//find which side to use\n
 		if (abs(ray.x) > abs(ray.y)) {
