@@ -185,8 +185,9 @@ public abstract class RenderMethod {
 		GL20.glUniform1i(texBottomUniform, 5);
 		int fovUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fovx");
 		GL20.glUniform1f(fovUniform, getFOV());
+		//GL20.glUniform1f(aspectratio, guiScreen.width/guiScreen.height);
 		int fisheyetype = GL20.glGetUniformLocation(shader.getShaderProgram(), "fisheyetype");
-		GL20.glUniform1i(fovUniform, getfisheyetype());
+		GL20.glUniform1i(fisheyetype, getfisheyetype());
 		int backgroundUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "backgroundColor");
 		GL20.glUniform4f(backgroundUniform, 0, 0, 0, 1);
 		

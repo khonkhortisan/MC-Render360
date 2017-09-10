@@ -19,6 +19,8 @@ uniform vec2 pixelOffset[16];
 
 uniform float fovx;
 
+//uniform float aspectratio;
+
 uniform int fisheyetype;
 
 uniform vec4 backgroundColor;
