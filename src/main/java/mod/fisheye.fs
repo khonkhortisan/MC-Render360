@@ -61,6 +61,14 @@ void main(void) {
 		float cx = (texcoord.x+pixelOffset[loop].x-0.5)*2*M_PI*fovx/360;
 		float cy = (texcoord.y+pixelOffset[loop].y-0.5)*2*M_PI*fovx/360;
 		
+		//fcontain
+		float aspectratio=1440.0/900.0;
+		if (aspectratio > 1.0) {
+			cx = cx * aspectratio;
+		} else {
+			cy = cy * aspectratio;
+		}
+		
 		//float cx = (texcoord.x+pixelOffset[loop].x)*2 - 1;
 		//float cy = (texcoord.y+pixelOffset[loop].y)*2 - 1;
 		float r = sqrt(cx*cx+cy*cy);
