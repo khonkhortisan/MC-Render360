@@ -1,4 +1,4 @@
-
+#version 130//\n
 
 #define M_PI 3.14159265//\n
 
@@ -65,16 +65,16 @@ void main(void) {
 			return;
 		}
 
-		if (fisheyetype = 0) {//equidistant
+		//if (fisheyetype == 0) {//equidistant
 			float theta = r;
-		} else if (fisheyetype = 1) {//stereographic
-			float theta = 2*atan(r/2);
-		} else if (fisheyetype = 2) {//orthographic
-			float theta = asin(r);
-		} else if (fisheyetype = 3) {//equisolid
-			float theta = 2*asin(r/2);
-		} else if (fisheyetype = 4) {//thoby
-			float theta = asin(r/1.47)/0.713;
+		if (fisheyetype == 1) {//stereographic
+			theta = 2*atan(r/2);
+		} else if (fisheyetype == 2) {//orthographic
+			theta = asin(r);
+		} else if (fisheyetype == 3) {//equisolid
+			theta = 2*asin(r/2);
+		} else if (fisheyetype == 4) {//thoby
+			theta = asin(r/1.47)/0.713;
 		}
 
 		float s = sin(theta);
