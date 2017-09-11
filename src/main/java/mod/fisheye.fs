@@ -60,26 +60,39 @@ void main(void) {
 		vec3 ray = vec3(0, 0, -1);
 
 		//fisheye stuff
-		float cx = (texcoord.x+pixelOffset[loop].x-0.5)*2*M_PI*fovx/360;
-		float cy = (texcoord.y+pixelOffset[loop].y-0.5)*2*M_PI*fovx/360;
 		
-		//fcontain
-		float aspectratio=1440.0/900.0;
+		//point relative to center [0..1] -> [-1..1]
+		float cx = (texcoord.x+pixelOffset[loop].x)*2-1;
+		float cy = (texcoord.y+pixelOffset[loop].y)*2-1;
+		
+		//scale from square view to window shape view //fcontain
+		float aspectratio=1440.0/900.0; //FIXME
 		if (aspectratio > 1.0) {
 			cx = cx * aspectratio;
 		} else {
 			cy = cy * aspectratio;
 		}
-		
-		//float cx = (texcoord.x+pixelOffset[loop].x)*2 - 1;
-		//float cy = (texcoord.y+pixelOffset[loop].y)*2 - 1;
-		float r = sqrt(cx*cx+cy*cy);
-		//float r = sqrt((texcoord.x+pixelOffset[loop].x) * (texcoord.x+pixelOffset[loop].x) + (texcoord.y+pixelOffset[loop].y) * (texcoord.y+pixelOffset[loop].y));
-
-		if (r > M_PI*fovx/360) {
+		//only draw center circle
+		if (cx*cx+cy*cy > 1) {
 			color = backgroundColor;
 			return;
 		}
+		
+		//decrease fov by slider
+		float limitedfov = fovx;
+		//and by projection limit
+		if (fisheyetype == 2) {//orthographic [-1..1] -> [-0.5..0.5]
+			limitedfov = min(limitedfov, 180);
+		}
+		cx = cx * limitedfov/360;
+		cy = cy * limitedfov/360;
+		
+		//scale to angle (equidistant) [-1..1] -> [-pi..pi] (orthographic [-0.5..0.5] -> [-pi/2..pi/2]
+		cx = cx * M_PI;
+		cy = cy * M_PI;
+		
+		//angle from forward <=abs(pi) or <=abs(pi/2)
+		float r = sqrt(cx*cx+cy*cy);
 
 		//if (fisheyetype == 0) {//equidistant
 			float theta = r;
@@ -93,14 +106,11 @@ void main(void) {
 			theta = asin(r/1.47)/0.713;
 		}
 
+		//rotate ray
 		float s = sin(theta);
 		float x = (cx)/r*s, y = (cy)/r*s, z = cos(theta);
-
-		//float longitude = 2*atan((sqrt(2.0)*z*x)/(2*z*z - 1));
-		//float latitude = asin(sqrt(2.0)*z*y);
-
-		//rotate ray\n
-		//ray = rotate(ray, vec2(longitude, latitude));
+		
+		//other-handed coordinate system
 		ray.x = x; ray.y = y; ray.z = -z;
 
 		//find which side to use\n
