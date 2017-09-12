@@ -19,7 +19,7 @@ uniform vec2 pixelOffset[16];
 
 uniform float fovx;
 
-//uniform float aspectratio;
+uniform float aspectratio;
 
 uniform int fisheyetype;
 
@@ -66,11 +66,11 @@ void main(void) {
 		float cy = (texcoord.y+pixelOffset[loop].y)*2-1;
 		
 		//scale from square view to window shape view //fcontain
-		float aspectratio=1440.0/900.0; //FIXME
-		if (aspectratio > 1.0) {
+		//float aspectratio = 1440/900;
+		if (aspectratio > 1) {
 			cx = cx * aspectratio;
 		} else {
-			cy = cy * aspectratio;
+			cy = cy / aspectratio;
 		}
 		//only draw center circle
 		if (cx*cx+cy*cy > 1) {

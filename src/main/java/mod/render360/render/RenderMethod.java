@@ -185,9 +185,11 @@ public abstract class RenderMethod {
 		GL20.glUniform1i(texBottomUniform, 5);
 		int fovUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fovx");
 		GL20.glUniform1f(fovUniform, getFOV());
-		//GL20.glUniform1f(aspectratio, guiScreen.width/guiScreen.height);
-		int fisheyetype = GL20.glGetUniformLocation(shader.getShaderProgram(), "fisheyetype");
-		GL20.glUniform1i(fisheyetype, getfisheyetype());
+		int aspectratioUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "aspectratio");
+		//GL20.glUniform1f(aspectratio, mc.displayWidth/mc.displayHeight);
+		GL20.glUniform1f(aspectratioUniform, 1440/900);
+		int fisheyetypeUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fisheyetype");
+		GL20.glUniform1i(fisheyetypeUniform, getfisheyetype());
 		int backgroundUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "backgroundColor");
 		GL20.glUniform4f(backgroundUniform, 0, 0, 0, 1);
 		
@@ -408,8 +410,11 @@ public abstract class RenderMethod {
 		GL20.glUniform1i(texBottomUniform, 5);
 		int fovUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fovx");
 		GL20.glUniform1f(fovUniform, getFOV());
-		int fisheyetype = GL20.glGetUniformLocation(shader.getShaderProgram(), "fisheyetype");
-		GL20.glUniform1i(fovUniform, getfisheyetype());
+		int aspectratioUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "aspectratio");
+		//GL20.glUniform1f(aspectratio, mc.displayWidth/mc.displayHeight);
+		GL20.glUniform1f(aspectratioUniform, 1440/900);
+		int fisheyetypeUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fisheyetype");
+		GL20.glUniform1i(fisheyetypeUniform, getfisheyetype());
 		
 		int backgroundUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "backgroundColor");
 		float backgroundColor[] = getBackgroundColor();
