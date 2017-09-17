@@ -66,7 +66,6 @@ void main(void) {
 		float cy = (texcoord.y+pixelOffset[loop].y)*2-1;
 		
 		//scale from square view to window shape view //fcontain
-		//float aspectratio = 1440/900;
 		if (aspectratio > 1) {
 			cx = cx * aspectratio;
 		} else {
