@@ -91,60 +91,56 @@ void main(void) {
 			}
 		}
 		
-		//decrease fov by slider
-		float limitedfov = fovx;
-		//and by projection limit
-		if (fisheyetype == 2) {//orthographic [-1..1] -> [-0.5..0.5]
-			limitedfov = min(limitedfov, 180);
-		}
-		cx = cx * limitedfov/360;
-		cy = cy * limitedfov/360;
-		
+		//max theta as limited by fov
+		float fovtheta = fovx*M_PI/360;
 		float r;
 		float theta;
 		if (fisheyetype == 0) {//equidistant
 			//This is the x scale of the theta= equation. Not related to fov.
 			//it's the result of the forward equation with theta=pi
 			//forward: r=f*theta
-			float maxr = M_PI;
+			float maxr = fovtheta;
 				//scale to angle (equidistant) [-1..1] -> [-pi..pi] (orthographic [-0.5..0.5] -> [-pi/2..pi/2]
 				cx = cx * maxr;
 				cy = cy * maxr;
 				//angle from forward <=abs(pi) or <=abs(pi/2)
 				r = sqrt(cx*cx+cy*cy);
-			//reverse:
+			//inverse:
 			theta = r;
 		} else if (fisheyetype == 1) {//stereographic
 			//forward: r=2f*tan(theta/2)
-			float maxr = 2*tan(M_PI*0.5);
+			float maxr = 2*tan(fovtheta*0.5);
 				cx = cx * maxr;
 				cy = cy * maxr;
 				r = sqrt(cx*cx+cy*cy);
-			//reverse:
+			//inverse:
 			theta = 2*atan(r*0.5);
 		} else if (fisheyetype == 2) {//orthographic
+			//this projection has a mathematical limit at hemisphere
+			fovtheta = min(fovtheta, M_PI*0.5);
+		
 			//forward: r=f*sin(theta)
-			float maxr = sin(M_PI);
+			float maxr = sin(fovtheta);
 				cx = cx * maxr;
 				cy = cy * maxr;
 				r = sqrt(cx*cx+cy*cy);
-			//reverse:
+			//inverse:
 			theta = asin(r);
 		} else if (fisheyetype == 3) {//equisolid
 			//forward: r=2f*sin(theta/2)
-			float maxr = 2*sin(M_PI*0.5);
+			float maxr = 2*sin(fovtheta*0.5);
 				cx = cx * maxr;
 				cy = cy * maxr;
 				r = sqrt(cx*cx+cy*cy);
-			//reverse:
+			//inverse:
 			theta = 2*asin(r*0.5);
 		} else if (fisheyetype == 4) {//thoby
 			//forward: r=1.47*f*sin(0.713*theta)
-			float maxr = 1.47*sin(0.713*M_PI);
+			float maxr = 1.47*sin(0.713*fovtheta);
 				cx = cx * maxr;
 				cy = cy * maxr;
 				r = sqrt(cx*cx+cy*cy);
-			//reverse:
+			//inverse:
 			theta = asin(r/1.47)/0.713;
 		}
 
