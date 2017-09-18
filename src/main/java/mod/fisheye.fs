@@ -83,12 +83,12 @@ void main(void) {
 				cx = cx / sqrt((1/aspectratio)*(1/aspectratio)+1*1);
 				cy = cy / sqrt((1/aspectratio)*(1/aspectratio)+1*1);
 			}
-		}
-		//could put this in an } else {
-		//only draw center circle
-		if (cx*cx+cy*cy > 1) {
-			color = backgroundColor;
-			return;
+		} else {
+			//only draw center circle
+			if (cx*cx+cy*cy > 1) {
+				color = backgroundColor;
+				return;
+			}
 		}
 		
 		//decrease fov by slider
@@ -100,22 +100,51 @@ void main(void) {
 		cx = cx * limitedfov/360;
 		cy = cy * limitedfov/360;
 		
-		//scale to angle (equidistant) [-1..1] -> [-pi..pi] (orthographic [-0.5..0.5] -> [-pi/2..pi/2]
-		cx = cx * M_PI;
-		cy = cy * M_PI;
-		
-		//angle from forward <=abs(pi) or <=abs(pi/2)
-		float r = sqrt(cx*cx+cy*cy);
-
-		//if (fisheyetype == 0) {//equidistant
-			float theta = r;
-		if (fisheyetype == 1) {//stereographic
-			theta = 2*atan(r/2);
+		float r;
+		float theta;
+		if (fisheyetype == 0) {//equidistant
+			//This is the x scale of the theta= equation. Not related to fov.
+			//it's the result of the forward equation with theta=pi
+			//forward: r=f*theta
+			float maxr = M_PI;
+				//scale to angle (equidistant) [-1..1] -> [-pi..pi] (orthographic [-0.5..0.5] -> [-pi/2..pi/2]
+				cx = cx * maxr;
+				cy = cy * maxr;
+				//angle from forward <=abs(pi) or <=abs(pi/2)
+				r = sqrt(cx*cx+cy*cy);
+			//reverse:
+			theta = r;
+		} else if (fisheyetype == 1) {//stereographic
+			//forward: r=2f*tan(theta/2)
+			float maxr = 2*tan(M_PI*0.5);
+				cx = cx * maxr;
+				cy = cy * maxr;
+				r = sqrt(cx*cx+cy*cy);
+			//reverse:
+			theta = 2*atan(r*0.5);
 		} else if (fisheyetype == 2) {//orthographic
+			//forward: r=f*sin(theta)
+			float maxr = sin(M_PI);
+				cx = cx * maxr;
+				cy = cy * maxr;
+				r = sqrt(cx*cx+cy*cy);
+			//reverse:
 			theta = asin(r);
 		} else if (fisheyetype == 3) {//equisolid
-			theta = 2*asin(r/2);
+			//forward: r=2f*sin(theta/2)
+			float maxr = 2*sin(M_PI*0.5);
+				cx = cx * maxr;
+				cy = cy * maxr;
+				r = sqrt(cx*cx+cy*cy);
+			//reverse:
+			theta = 2*asin(r*0.5);
 		} else if (fisheyetype == 4) {//thoby
+			//forward: r=1.47*f*sin(0.713*theta)
+			float maxr = 1.47*sin(0.713*M_PI);
+				cx = cx * maxr;
+				cy = cy * maxr;
+				r = sqrt(cx*cx+cy*cy);
+			//reverse:
 			theta = asin(r/1.47)/0.713;
 		}
 
