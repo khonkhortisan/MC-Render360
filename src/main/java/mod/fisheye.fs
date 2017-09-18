@@ -21,6 +21,8 @@ uniform float fovx;
 
 uniform float aspectratio;
 
+uniform bool fullframe;
+
 uniform int fisheyetype;
 
 uniform vec4 backgroundColor;
@@ -71,6 +73,18 @@ void main(void) {
 		} else {
 			cy = cy / aspectratio;
 		}
+		
+		if (fullframe) {
+			//scale circle radius [1] up to screen diagonal radius [sqrt(2) or higher]
+			if (aspectratio > 1) {
+				cx = cx / sqrt(aspectratio*aspectratio+1*1);
+				cy = cy / sqrt(aspectratio*aspectratio+1*1);
+			} else {
+				cx = cx / sqrt((1/aspectratio)*(1/aspectratio)+1*1);
+				cy = cy / sqrt((1/aspectratio)*(1/aspectratio)+1*1);
+			}
+		}
+		//could put this in an } else {
 		//only draw center circle
 		if (cx*cx+cy*cy > 1) {
 			color = backgroundColor;

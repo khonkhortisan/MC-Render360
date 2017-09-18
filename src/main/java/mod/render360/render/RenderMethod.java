@@ -189,6 +189,8 @@ public abstract class RenderMethod {
 		GL20.glUniform1f(aspectratioUniform, mc.displayWidth/(float)mc.displayHeight);
 		int fisheyetypeUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fisheyetype");
 		GL20.glUniform1i(fisheyetypeUniform, getfisheyetype());
+		int fullframeUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fullframe");
+		GL20.glUniform1i(fullframeUniform, getfullframe()?1:0);
 		int backgroundUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "backgroundColor");
 		GL20.glUniform4f(backgroundUniform, 0, 0, 0, 1);
 		
@@ -413,6 +415,8 @@ public abstract class RenderMethod {
 		GL20.glUniform1f(aspectratioUniform, mc.displayWidth/(float)mc.displayHeight);
 		int fisheyetypeUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fisheyetype");
 		GL20.glUniform1i(fisheyetypeUniform, getfisheyetype());
+		int fullframeUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "fullframe");
+		GL20.glUniform1i(fullframeUniform, getfullframe()?1:0);
 		
 		int backgroundUniform = GL20.glGetUniformLocation(shader.getShaderProgram(), "backgroundColor");
 		float backgroundColor[] = getBackgroundColor();
@@ -529,6 +533,10 @@ public abstract class RenderMethod {
 	
 	public int getfisheyetype() {
 		return 0;
+	}
+	
+	public boolean getfullframe() {
+		return false;
 	}
 	
 	public float getQuality() {
