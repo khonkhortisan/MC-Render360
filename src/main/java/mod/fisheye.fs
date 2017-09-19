@@ -134,7 +134,7 @@ void main(void) {
 				r = sqrt(cx*cx+cy*cy);
 			//inverse:
 			theta = asin(r/1.47)/0.713;
-		} else if (fisheyetype == 4) {//orthographic
+		} else {// if (fisheyetype == 4) {//orthographic
 			//this projection has a mathematical limit at hemisphere
 			fovtheta = min(fovtheta, M_PI*0.5);
 		
