@@ -532,7 +532,7 @@ public abstract class RenderMethod {
 	}
 	
 	public int getfisheyetype() {
-		return 0;
+		return 1;
 	}
 	
 	public boolean getfullframe() {

@@ -95,7 +95,15 @@ void main(void) {
 		float fovtheta = fovx*M_PI/360;
 		float r;
 		float theta;
-		if (fisheyetype == 0) {//equidistant
+		if (fisheyetype == 0) {//stereographic
+			//forward: r=2f*tan(theta/2)
+			float maxr = 2*tan(fovtheta*0.5);
+				cx = cx * maxr;
+				cy = cy * maxr;
+				r = sqrt(cx*cx+cy*cy);
+			//inverse:
+			theta = 2*atan(r*0.5);
+		} else if (fisheyetype == 1) {//equidistant
 			//This is the x scale of the theta= equation. Not related to fov.
 			//it's the result of the forward equation with theta=pi
 			//forward: r=f*theta
@@ -107,15 +115,23 @@ void main(void) {
 				r = sqrt(cx*cx+cy*cy);
 			//inverse:
 			theta = r;
-		} else if (fisheyetype == 1) {//stereographic
-			//forward: r=2f*tan(theta/2)
-			float maxr = 2*tan(fovtheta*0.5);
+		} else if (fisheyetype == 2) {//equisolid
+			//forward: r=2f*sin(theta/2)
+			float maxr = 2*sin(fovtheta*0.5);
 				cx = cx * maxr;
 				cy = cy * maxr;
 				r = sqrt(cx*cx+cy*cy);
 			//inverse:
-			theta = 2*atan(r*0.5);
-		} else if (fisheyetype == 2) {//orthographic
+			theta = 2*asin(r*0.5);
+		} else if (fisheyetype == 3) {//thoby
+			//forward: r=1.47*f*sin(0.713*theta)
+			float maxr = 1.47*sin(0.713*fovtheta);
+				cx = cx * maxr;
+				cy = cy * maxr;
+				r = sqrt(cx*cx+cy*cy);
+			//inverse:
+			theta = asin(r/1.47)/0.713;
+		} else if (fisheyetype == 4) {//orthographic
 			//this projection has a mathematical limit at hemisphere
 			fovtheta = min(fovtheta, M_PI*0.5);
 		
@@ -126,22 +142,6 @@ void main(void) {
 				r = sqrt(cx*cx+cy*cy);
 			//inverse:
 			theta = asin(r);
-		} else if (fisheyetype == 3) {//equisolid
-			//forward: r=2f*sin(theta/2)
-			float maxr = 2*sin(fovtheta*0.5);
-				cx = cx * maxr;
-				cy = cy * maxr;
-				r = sqrt(cx*cx+cy*cy);
-			//inverse:
-			theta = 2*asin(r*0.5);
-		} else if (fisheyetype == 4) {//thoby
-			//forward: r=1.47*f*sin(0.713*theta)
-			float maxr = 1.47*sin(0.713*fovtheta);
-				cx = cx * maxr;
-				cy = cy * maxr;
-				r = sqrt(cx*cx+cy*cy);
-			//inverse:
-			theta = asin(r/1.47)/0.713;
 		}
 
 		//rotate ray
