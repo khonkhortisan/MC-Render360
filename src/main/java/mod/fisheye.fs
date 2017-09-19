@@ -124,6 +124,9 @@ void main(void) {
 			//inverse:
 			theta = 2*asin(r*0.5);
 		} else if (fisheyetype == 3) {//thoby
+			//it starts shrinking near max fov without this - 256.68 degrees
+			fovtheta = min(fovtheta, M_PI*0.713);
+			
 			//forward: r=1.47*f*sin(0.713*theta)
 			float maxr = 1.47*sin(0.713*fovtheta);
 				cx = cx * maxr;
