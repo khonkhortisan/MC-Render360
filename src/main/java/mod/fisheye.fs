@@ -19,11 +19,9 @@ uniform vec2 pixelOffset[16];
 
 uniform float fovx;
 
-uniform float aspectRatio;
-
-uniform bool fullFrame;
-
 uniform int fisheyeType;
+uniform float aspectRatio;
+uniform bool fullFrame;
 
 uniform vec4 backgroundColor;
 
@@ -52,19 +50,19 @@ void main(void) {
 		
 		//scale from square view to window shape view //fcontain
 		if (aspectRatio > 1) {
-			x = x * aspectRatio;
+			x *= aspectRatio;
 		} else {
-			y = y / aspectRatio;
+			y /= aspectRatio;
 		}
 		
 		if (fullFrame) {
 			//scale circle radius [1] up to screen diagonal radius [sqrt(2) or higher]
 			if (aspectRatio > 1) {
-				x = x / sqrt(aspectRatio*aspectRatio+1);
-				y = y / sqrt(aspectRatio*aspectRatio+1);
+				x /= sqrt(aspectRatio*aspectRatio+1);
+				y /= sqrt(aspectRatio*aspectRatio+1);
 			} else {
-				x = x / sqrt((1/aspectRatio)*(1/aspectRatio)+1);
-				y = y / sqrt((1/aspectRatio)*(1/aspectRatio)+1);
+				x /= sqrt((1/aspectRatio)*(1/aspectRatio)+1);
+				y /= sqrt((1/aspectRatio)*(1/aspectRatio)+1);
 			}
 		} else {
 			//only draw center circle
@@ -81,8 +79,8 @@ void main(void) {
 		if (fisheyeType == 0) {//stereographic
 			//forward: r=2f*tan(theta/2)
 			float maxr = 2*tan(fovTheta*0.5);
-				x = x * maxr;
-				y = y * maxr;
+				x *= maxr;
+				y *= maxr;
 				r = sqrt(x*x+y*y);
 			//inverse:
 			theta = 2*atan(r*0.5);
@@ -92,8 +90,8 @@ void main(void) {
 			//forward: r=f*theta
 			float maxr = fovTheta;
 				//scale to angle (equidistant) [-1..1] -> [-pi..pi] (orthographic [-0.5..0.5] -> [-pi/2..pi/2]
-				x = x * maxr;
-				y = y * maxr;
+				x *= maxr;
+				y *= maxr;
 				//angle from forward <=abs(pi) or <=abs(pi/2)
 				r = sqrt(x*x+y*y);
 			//inverse:
@@ -101,8 +99,8 @@ void main(void) {
 		} else if (fisheyeType == 2) {//equisolid
 			//forward: r=2f*sin(theta/2)
 			float maxr = 2*sin(fovTheta*0.5);
-				x = x * maxr;
-				y = y * maxr;
+				x *= maxr;
+				y *= maxr;
 				r = sqrt(x*x+y*y);
 			//inverse:
 			theta = 2*asin(r*0.5);
@@ -112,8 +110,8 @@ void main(void) {
 			
 			//forward: r=1.47*f*sin(0.713*theta)
 			float maxr = 1.47*sin(0.713*fovTheta);
-				x = x * maxr;
-				y = y * maxr;
+				x *= maxr;
+				y *= maxr;
 				r = sqrt(x*x+y*y);
 			//inverse:
 			theta = asin(r/1.47)/0.713;
@@ -123,8 +121,8 @@ void main(void) {
 		
 			//forward: r=f*sin(theta)
 			float maxr = sin(fovTheta);
-				x = x * maxr;
-				y = y * maxr;
+				x *= maxr;
+				y *= maxr;
 				r = sqrt(x*x+y*y);
 			//inverse:
 			theta = asin(r);
@@ -132,9 +130,7 @@ void main(void) {
 
 		//rotate ray
 		float s = sin(theta);
-		ray.x = x/r*s;
-		ray.y = y/r*s;
-		ray.z = -cos(theta);
+		ray = vec3(x/r*s, y/r*s, -cos(theta));
 
 		//find which side to use\n
 		if (abs(ray.x) > abs(ray.y)) {
