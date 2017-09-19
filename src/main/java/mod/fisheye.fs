@@ -19,11 +19,11 @@ uniform vec2 pixelOffset[16];
 
 uniform float fovx;
 
-uniform float aspectratio;
+uniform float aspectRatio;
 
-uniform bool fullframe;
+uniform bool fullFrame;
 
-uniform int fisheyetype;
+uniform int fisheyeType;
 
 uniform vec4 backgroundColor;
 
@@ -32,23 +32,6 @@ uniform vec2 cursorPos;
 uniform bool drawCursor;
 
 out vec4 color;
-
-vec3 rotate(vec3 ray, vec2 angle) {
-
-  //rotate y\n
-  float y = -sin(angle.y)*ray.z;
-  float z = cos(angle.y)*ray.z;
-  ray.y = y;
-  ray.z = z;
-
-  //rotate x\n
-  float x = -sin(angle.x)*ray.z;
-  z = cos(angle.x)*ray.z;
-  ray.x = x;
-  ray.z = z;
-
-  return ray;
-}
 
 void main(void) {
   /* Ray-trace a cube */
@@ -64,95 +47,94 @@ void main(void) {
 		//fisheye stuff
 		
 		//point relative to center [0..1] -> [-1..1]
-		float cx = (texcoord.x+pixelOffset[loop].x)*2-1;
-		float cy = (texcoord.y+pixelOffset[loop].y)*2-1;
+		float x = (texcoord.x+pixelOffset[loop].x)*2-1;
+		float y = (texcoord.y+pixelOffset[loop].y)*2-1;
 		
 		//scale from square view to window shape view //fcontain
-		if (aspectratio > 1) {
-			cx = cx * aspectratio;
+		if (aspectRatio > 1) {
+			x = x * aspectRatio;
 		} else {
-			cy = cy / aspectratio;
+			y = y / aspectRatio;
 		}
 		
-		if (fullframe) {
+		if (fullFrame) {
 			//scale circle radius [1] up to screen diagonal radius [sqrt(2) or higher]
-			if (aspectratio > 1) {
-				cx = cx / sqrt(aspectratio*aspectratio+1*1);
-				cy = cy / sqrt(aspectratio*aspectratio+1*1);
+			if (aspectRatio > 1) {
+				x = x / sqrt(aspectRatio*aspectRatio+1);
+				y = y / sqrt(aspectRatio*aspectRatio+1);
 			} else {
-				cx = cx / sqrt((1/aspectratio)*(1/aspectratio)+1*1);
-				cy = cy / sqrt((1/aspectratio)*(1/aspectratio)+1*1);
+				x = x / sqrt((1/aspectRatio)*(1/aspectRatio)+1);
+				y = y / sqrt((1/aspectRatio)*(1/aspectRatio)+1);
 			}
 		} else {
 			//only draw center circle
-			if (cx*cx+cy*cy > 1) {
+			if (x*x+y*y > 1) {
 				color = backgroundColor;
 				return;
 			}
 		}
 		
 		//max theta as limited by fov
-		float fovtheta = fovx*M_PI/360;
+		float fovTheta = fovx*M_PI/360;
 		float r;
 		float theta;
-		if (fisheyetype == 0) {//stereographic
+		if (fisheyeType == 0) {//stereographic
 			//forward: r=2f*tan(theta/2)
-			float maxr = 2*tan(fovtheta*0.5);
-				cx = cx * maxr;
-				cy = cy * maxr;
-				r = sqrt(cx*cx+cy*cy);
+			float maxr = 2*tan(fovTheta*0.5);
+				x = x * maxr;
+				y = y * maxr;
+				r = sqrt(x*x+y*y);
 			//inverse:
 			theta = 2*atan(r*0.5);
-		} else if (fisheyetype == 1) {//equidistant
+		} else if (fisheyeType == 1) {//equidistant
 			//This is the x scale of the theta= equation. Not related to fov.
 			//it's the result of the forward equation with theta=pi
 			//forward: r=f*theta
-			float maxr = fovtheta;
+			float maxr = fovTheta;
 				//scale to angle (equidistant) [-1..1] -> [-pi..pi] (orthographic [-0.5..0.5] -> [-pi/2..pi/2]
-				cx = cx * maxr;
-				cy = cy * maxr;
+				x = x * maxr;
+				y = y * maxr;
 				//angle from forward <=abs(pi) or <=abs(pi/2)
-				r = sqrt(cx*cx+cy*cy);
+				r = sqrt(x*x+y*y);
 			//inverse:
 			theta = r;
-		} else if (fisheyetype == 2) {//equisolid
+		} else if (fisheyeType == 2) {//equisolid
 			//forward: r=2f*sin(theta/2)
-			float maxr = 2*sin(fovtheta*0.5);
-				cx = cx * maxr;
-				cy = cy * maxr;
-				r = sqrt(cx*cx+cy*cy);
+			float maxr = 2*sin(fovTheta*0.5);
+				x = x * maxr;
+				y = y * maxr;
+				r = sqrt(x*x+y*y);
 			//inverse:
 			theta = 2*asin(r*0.5);
-		} else if (fisheyetype == 3) {//thoby
+		} else if (fisheyeType == 3) {//thoby
 			//it starts shrinking near max fov without this - 256.68 degrees
-			fovtheta = min(fovtheta, M_PI*0.713);
+			fovTheta = min(fovTheta, M_PI*0.713);
 			
 			//forward: r=1.47*f*sin(0.713*theta)
-			float maxr = 1.47*sin(0.713*fovtheta);
-				cx = cx * maxr;
-				cy = cy * maxr;
-				r = sqrt(cx*cx+cy*cy);
+			float maxr = 1.47*sin(0.713*fovTheta);
+				x = x * maxr;
+				y = y * maxr;
+				r = sqrt(x*x+y*y);
 			//inverse:
 			theta = asin(r/1.47)/0.713;
-		} else {// if (fisheyetype == 4) {//orthographic
+		} else {// if (fisheyeType == 4) {//orthographic
 			//this projection has a mathematical limit at hemisphere
-			fovtheta = min(fovtheta, M_PI*0.5);
+			fovTheta = min(fovTheta, M_PI*0.5);
 		
 			//forward: r=f*sin(theta)
-			float maxr = sin(fovtheta);
-				cx = cx * maxr;
-				cy = cy * maxr;
-				r = sqrt(cx*cx+cy*cy);
+			float maxr = sin(fovTheta);
+				x = x * maxr;
+				y = y * maxr;
+				r = sqrt(x*x+y*y);
 			//inverse:
 			theta = asin(r);
 		}
 
 		//rotate ray
 		float s = sin(theta);
-		float x = (cx)/r*s, y = (cy)/r*s, z = cos(theta);
-		
-		//other-handed coordinate system
-		ray.x = x; ray.y = y; ray.z = -z;
+		ray.x = x/r*s;
+		ray.y = y/r*s;
+		ray.z = -cos(theta);
 
 		//find which side to use\n
 		if (abs(ray.x) > abs(ray.y)) {
